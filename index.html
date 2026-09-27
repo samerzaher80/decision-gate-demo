@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="A deterministic action gate for AI proposals, with evidence, authority, risk and an auditable decision trail." />
+  <title>Decision Gate — Sam AI Lab</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="identity"><span class="identity-mark">S</span><div><strong>Decision Gate</strong><small>Sam AI Lab · challenge demo</small></div></div>
+      <div class="topbar-right"><span class="status-dot"></span><span>LOCAL POLICY ENGINE</span><span class="topbar-divider"></span><span>SYNTHETIC CASES</span></div>
+    </header>
+
+    <main class="workspace">
+      <aside class="rail" aria-label="Scenarios">
+        <p class="eyebrow">01 / CHOOSE A DOMAIN</p>
+        <h1>Before an agent acts.</h1>
+        <p class="rail-intro">A proposed action enters. A traceable decision leaves. This demo never touches a real system.</p>
+        <div class="scenario-list" role="group" aria-label="Example domains">
+          <button class="scenario active" data-domain="refund" type="button"><span class="scenario-index">01</span><span><strong>Refund approval</strong><small>Customer operations</small></span><span class="arrow">↗</span></button>
+          <button class="scenario" data-domain="deploy" type="button"><span class="scenario-index">02</span><span><strong>Code deployment</strong><small>Release operations</small></span><span class="arrow">↗</span></button>
+          <button class="scenario" data-domain="moderation" type="button"><span class="scenario-index">03</span><span><strong>Content removal</strong><small>Trust &amp; safety</small></span><span class="arrow">↗</span></button>
+        </div>
+        <div class="rail-foot"><span>DEMO MODE</span><span>No tools connected · No production authorization</span></div>
+      </aside>
+
+      <section class="main-panel" aria-label="Decision workspace">
+        <div class="section-heading"><div><p class="eyebrow">02 / PROPOSED ACTION</p><h2 id="caseTitle">Approve a $75 refund</h2></div><span id="caseId" class="case-id">CASE / RF-1048</span></div>
+        <p id="caseDescription" class="case-description">A support agent proposes refunding a duplicate payment. The order, payment, and current refund policy must agree before approval.</p>
+        <div class="case-meta"><div><span>DOMAIN</span><strong id="metaDomain">Refund</strong></div><div><span>REVERSIBILITY</span><strong id="metaReversibility">Partial</strong></div><div><span>REQUIRED AUTHORITY</span><strong id="metaAuthority">refund:approve</strong></div></div>
+
+        <div class="controls"><div><label for="fault">CHANGE ONE SIGNAL</label><select id="fault"><option value="none">Baseline evidence</option><option value="stale">Make one source stale</option><option value="missing">Remove one required source</option><option value="authority">Revoke actor authority</option><option value="prohibited">Flag policy prohibition</option></select></div><button id="evaluate" class="evaluate-button" type="button">Evaluate action <span>→</span></button></div>
+
+        <section class="result" aria-live="polite"><div class="result-heading"><p class="eyebrow">03 / DECISION</p><span id="evaluatedAt">Waiting for evaluation</span></div><div class="result-primary"><strong id="decision" class="decision idle">—</strong><div class="metrics"><div><span>CONFIDENCE</span><strong id="confidence">—</strong></div><div><span>RISK</span><strong id="risk">—</strong></div></div></div><p id="reason" class="reason">Select a domain and run the policy engine.</p><div class="result-bottom"><span id="missing">MISSING / —</span><span id="review">No downstream action will execute.</span></div></section>
+
+        <section class="evidence-section"><div class="section-heading compact"><div><p class="eyebrow">04 / INPUTS</p><h2>Evidence register</h2></div><span id="evidenceCount" class="case-id">0 SOURCES</span></div><div id="evidenceList" class="evidence-list"></div></section>
+      </section>
+
+      <aside class="audit-panel" aria-label="Audit trail"><div class="audit-top"><p class="eyebrow">05 / AUDIT TRAIL</p><h2>Every decision has a receipt.</h2><p>Inputs and outcomes are hash linked in this browser session. Export them for independent inspection.</p><button id="export" type="button" class="text-button" disabled>Export JSON ↗</button></div><div id="auditList" class="audit-list"><p class="audit-empty">No decisions recorded yet.</p></div><div class="audit-foot"><span>CHAIN INTEGRITY</span><strong id="integrity">NO ENTRIES</strong><small>SHA-256 detects edits inside an exported chain. It does not prove the source was truthful.</small></div></aside>
+    </main>
+    <footer class="footer"><span>DETERMINISTIC DEMO · NO LLM JUDGES THE GATE</span><span>Built for the DOO Decision Engine challenge · 2026</span></footer>
+  </div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
