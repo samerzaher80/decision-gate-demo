@@ -136,10 +136,11 @@ export async function appendAudit(chain, proposal, result) {
   return entry;
 }
 
-export async function verifyAudit(chain) {
+export async function verifyAudit(chain, expectedHead) {
   if (!Array.isArray(chain)) return false;
   let previousHash = 'GENESIS';
   for (let index = 0; index < chain.length; index += 1) {
+    if (!chain[index] || typeof chain[index] !== 'object') return false;
     const { hash, ...entry } = chain[index];
     if (entry.sequence !== index + 1 || entry.previousHash !== previousHash || typeof hash !== 'string') return false;
     const bytes = new TextEncoder().encode(JSON.stringify(entry));
@@ -148,7 +149,7 @@ export async function verifyAudit(chain) {
     if (hash !== expected) return false;
     previousHash = hash;
   }
-  return true;
+  return expectedHead === undefined || (chain.length > 0 && previousHash === expectedHead);
 }
 
 export function policySummary(domain) {

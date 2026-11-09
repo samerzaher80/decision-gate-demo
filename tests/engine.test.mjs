@@ -54,3 +54,13 @@ test('hash-linked receipts detect altered decisions', async () => {
   const edited = structuredClone([first, second]); edited[0].result.decision = 'refuse';
   assert.equal(await verifyAudit(edited), false);
 });
+
+test('a valid rewritten chain fails an independently retained checkpoint', async () => {
+  const {appendAudit,verifyAudit} = await import('../engine.js');
+  const original = await appendAudit([], {id:'P1'}, {decision:'ask'});
+  const rewritten = await appendAudit([], {id:'P1'}, {decision:'execute'});
+  assert.equal(await verifyAudit([original],original.hash),true);
+  assert.equal(await verifyAudit([rewritten]),true);
+  assert.equal(await verifyAudit([rewritten],original.hash),false);
+  assert.equal(await verifyAudit([],original.hash),false);
+});

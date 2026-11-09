@@ -53,3 +53,5 @@ Decision layers will become the boundary between models that can suggest actions
 ## Scope and provenance
 
 Built as a fresh, public challenge demonstration by Sameer S. Najm / Sam AI Lab. It illustrates design principles also explored in private research; no private repositories, clinical data, customer data, or proprietary model weights are included.
+
+Save the displayed audit head separately at export time. Use **Verify export** with the saved head and JSON file. A fully rehashed rewrite can pass an internal chain check but cannot match the independent checkpoint.

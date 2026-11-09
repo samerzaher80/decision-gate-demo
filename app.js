@@ -71,6 +71,8 @@ function renderResult(result) {
 function renderAudit() {
   $('auditList').innerHTML = chain.slice().reverse().map((entry) => `<div class="audit-entry"><div class="audit-entry-head"><strong>#${entry.sequence} ${escapeHtml(entry.result.decision.toUpperCase())}</strong><span>${escapeHtml(entry.proposal.id)}</span></div><p>${escapeHtml(entry.result.reasons[0])}</p><code>${entry.hash.slice(0, 16)}…</code></div>`).join('') || '<p class="audit-empty">No decisions recorded yet.</p>';
   $('export').disabled = chain.length === 0;
+  $('checkpoint').textContent = chain.at(-1)?.hash ?? 'No entries yet';
+  $('checkpoint').style.overflowWrap = 'anywhere';
 }
 
 document.querySelectorAll('.scenario').forEach((button) => button.addEventListener('click', () => { domain = button.dataset.domain; renderScenario(); }));
@@ -96,3 +98,20 @@ $('export').addEventListener('click', () => {
 });
 
 renderScenario();
+
+$('verifyExport').addEventListener('click', async () => {
+  const checkpoint = $('expectedHead').value.trim().toLowerCase();
+  const file = $('verifyFile').files[0];
+  const status = $('exportStatus');
+  if (!file || !/^[a-f0-9]{64}$/.test(checkpoint)) {
+    status.textContent = 'Choose an audit export and enter its separately saved checkpoint.';
+    return;
+  }
+  try {
+    const {entries} = JSON.parse(await file.text());
+    status.textContent = await verifyAudit(entries, checkpoint)
+      ? 'Verified against trusted checkpoint.' : 'Chain or checkpoint mismatch.';
+  } catch {
+    status.textContent = 'Could not read this audit export.';
+  }
+});
